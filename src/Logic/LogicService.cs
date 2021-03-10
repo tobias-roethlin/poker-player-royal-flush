@@ -165,12 +165,12 @@ namespace Nancy.Simple.Logic
                 return (int) (tournament.OurPlayer.Stack * (probabilityDecimal / 2));
             }
 
-            if (probability > 0.5)
+            if (probabilityDecimal > 0.5)
             {
                 return (int) (tournament.Pot * 0.5);
             }
             
-            if (probability > 0.2)
+            if (probabilityDecimal > 0.2)
             {
                 var maxBet = (int) (tournament.OurPlayer.Stack * probabilityDecimal / 1.5);
                 
