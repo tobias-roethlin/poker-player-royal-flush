@@ -19,7 +19,6 @@ namespace Nancy.Simple
 		{
 			
 			
-			
 			//TODO: Use this method to showdown
 		}
 	}
