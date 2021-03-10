@@ -27,7 +27,8 @@ namespace Nancy.Simple
 
 		public static void ShowDown(JObject gameState)
 		{
-			//TODO: Use this method to showdown
+			Console.WriteLine("Showdown");
+			Console.Write(gameState);
 		}
 	}
 }
