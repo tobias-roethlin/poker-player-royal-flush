@@ -45,16 +45,31 @@ namespace Nancy.Simple.Logic
             }
 
             var considerAllIn = false;
-            var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
-            if (!tournament.IsPreFlop)
+            var betValue = 0.0;
+            if (tournament.IsPreFlop)
             {
-                betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
+                if (tournament.OurPlayer.Bet == 0 || probability > 0.2)
+                {
+                    betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
+                }
+                else if (ConsiderFold(tournament))
+                {
+                    return 0;
+                }
+
+                if (probability > 0.5)
+                {
+                    betValue = Math.Max(betValue, tournament.Pot * 0.5);
+                }
+            }
+            else
+            {
+                if (tournament.OurPlayer.Bet == 0)
+                {
+                    betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
+                }
             }
 
-            if (tournament.IsPreFlop && probability > 0.5)
-            {
-                betValue = Math.Max(betValue, tournament.Pot * 0.5);
-            }
 
             var firstCardWithCommunityCards = new[] { tournament.OurPlayer.Card1 }.Union(tournament.CommunityCards);
             var secondCardWithCommunityCards = new[] { tournament.OurPlayer.Card2 }.Union(tournament.CommunityCards);
@@ -70,10 +85,12 @@ namespace Nancy.Simple.Logic
             else if (IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards))
             {
                 betValue = tournament.Pot * 1.5;
+                considerAllIn = true;
             }
             else if (IsStraight(firstCardWithCommunityCards) || IsStraight(secondCardWithCommunityCards))
             {
                 betValue = tournament.Pot * 1.5;
+                considerAllIn = true;
             }
             else if (IsThreeOfAKind(tournament.GetCards()) && IsPair(ourCards))
             {
