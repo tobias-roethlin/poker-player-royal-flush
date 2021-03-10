@@ -172,7 +172,7 @@ namespace Nancy.Simple.Logic
             
             if (probability > 0.2)
             {
-                var maxBet = (int) (tournament.OurPlayer.Stack * probabilityDecimal);
+                var maxBet = (int) (tournament.OurPlayer.Stack * probabilityDecimal / 1.5);
                 
                 if (maxBet < Call)
                 {
