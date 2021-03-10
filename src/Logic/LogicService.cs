@@ -58,7 +58,7 @@ namespace Nancy.Simple.Logic
                 || (IsFullHouse(ourCardsWithCommunityCards) && !IsFullHouse(communityCards))
                 || (IsFourOfAKind(ourCardsWithCommunityCards) && !IsFourOfAKind(communityCards)))
             {
-                betValue = Math.Max(betValue, tournament.Pot * 3);
+                betValue = Math.Max(betValue, tournament.Pot * 2);
                 considerAllIn = true;
             }
             else if (((IsStraightFlush(firstCardWithCommunityCards) || IsStraightFlush(secondCardWithCommunityCards)) && !IsStraightFlush(communityCards))
@@ -68,32 +68,33 @@ namespace Nancy.Simple.Logic
                 betValue = Math.Max(betValue, tournament.Pot * 2);
                 considerAllIn = true;
             }
+            else if (IsTwoPair(ourCardsWithCommunityCards) && !IsPair(communityCards))
+            {
+                betValue = Math.Max(betValue, tournament.Pot * 2);
+                considerAllIn = true;
+            }
             else if (IsFlush(ourCardsWithCommunityCards) && !IsFlush(communityCards))
             {
-                betValue = tournament.Pot * 2;
+                betValue = Math.Max(betValue, tournament.Pot * 1.5);
                 considerAllIn = true;
             }
             else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards)) && !IsFlush(communityCards))
             {
-                betValue = tournament.Pot * 1.5;
+                betValue = Math.Max(betValue, tournament.Pot * 1.4);
                 considerAllIn = true;
             }
             else if ((IsStraight(firstCardWithCommunityCards) || IsStraight(secondCardWithCommunityCards)) && !IsStraight(communityCards))
             {
-                betValue = tournament.Pot * 1.5;
+                betValue = Math.Max(betValue, tournament.Pot * 1.4);
                 considerAllIn = true;
             }
             else if (IsThreeOfAKind(tournament.GetCards()) && IsPair(ourCards))
             {
-                betValue = tournament.Pot * 1.5;
+                betValue = tournament.Pot * 1.1;
             }
             else if (IsThreeOfAKind(tournament.GetCards()) && (IsPair(firstCardWithCommunityCards) || IsPair(secondCardWithCommunityCards)))
             {
-                betValue = tournament.Pot * 1.5;
-            }
-            else if (IsTwoPair(ourCardsWithCommunityCards) && !IsPair(communityCards))
-            {
-                betValue = tournament.Pot * 0.8;
+                betValue = tournament.Pot * 1.1;
             }
             else if (IsTwoPair(tournament.GetCards()) && IsPair(ourCards))
             {
