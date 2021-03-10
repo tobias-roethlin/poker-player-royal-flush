@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Security.Policy;
-using System.Text;
 using Nancy.Simple.BusinessObject;
 
 namespace Nancy.Simple.Logic
@@ -230,7 +227,12 @@ namespace Nancy.Simple.Logic
             tournament.Round = game.round;
             tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
             tournament.OtherPlayers = game.players.Where(p => p.name != "Royal Flush").Select(PlayerMapper).ToList();
-            tournament.OurPlayer = PlayerMapper( game.players.Single(p => p.name == "Royal Flush"));
+
+            var ourPlayer = game.players.SingleOrDefault(p => p.name == "Royal Flush");
+            if (ourPlayer != null)
+            {
+                tournament.OurPlayer = PlayerMapper( ourPlayer);
+            }
 
             return tournament;
         }
@@ -240,8 +242,13 @@ namespace Nancy.Simple.Logic
             var player = new Player();
 
             player.Bet = playerJson.bet;
-            player.Card1 = CardMapper(playerJson.hole_cards[0]);
-            player.Card2 = CardMapper(playerJson.hole_cards[1]);
+
+            if (playerJson.hole_cards.Count > 0)
+            {
+                player.Card1 = CardMapper(playerJson.hole_cards[0]);
+                player.Card2 = CardMapper(playerJson.hole_cards[1]);
+            }
+
             player.Name = playerJson.name;
             player.Stack = int.Parse(playerJson.stack);
             player.Status = playerJson.status;
