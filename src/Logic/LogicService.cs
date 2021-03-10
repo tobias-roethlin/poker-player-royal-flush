@@ -75,7 +75,7 @@ namespace Nancy.Simple.Logic
             var secondCardWithCommunityCards = new[] { tournament.OurPlayer.Card2 }.Union(tournament.CommunityCards);
             var ourCards = tournament.OurPlayer.GetCards();
 
-            if ((IsStraightFlush(firstCardWithCommunityCards) || IsStraightFlush(secondCardWithCommunityCards))
+            if (IsStraightFlush(firstCardWithCommunityCards) || IsStraightFlush(secondCardWithCommunityCards)
                 || IsFullHouse(firstCardWithCommunityCards) || IsFullHouse(secondCardWithCommunityCards)
                 || IsFourOfAKind(firstCardWithCommunityCards) || IsFourOfAKind(secondCardWithCommunityCards))
             {

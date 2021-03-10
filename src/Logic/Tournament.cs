@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Nancy.Simple.Logic
 {
@@ -17,6 +18,22 @@ namespace Nancy.Simple.Logic
             {
                 return CommunityCards == null || CommunityCards.Count == 0;
             }
+        }
+
+        public IEnumerable<IEnumerable<Card>> GetCommunityCards(int numberOfCards)
+        {
+            var list = new List<IEnumerable<Card>>();
+            if (CommunityCards == null)
+            {
+                return list;
+            }
+            
+            if (CommunityCards.Count <= numberOfCards)
+            {
+                return new[] { CommunityCards };
+            }
+
+            return list;
         }
 
         public IEnumerable<Card> GetCards()
