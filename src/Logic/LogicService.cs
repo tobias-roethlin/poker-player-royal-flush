@@ -12,22 +12,10 @@ namespace Nancy.Simple.Logic
     {
         public static int Bet(Game game)
         {
-            var tournament = new Tournament();
-            tournament.OurPlayer.Card1 = new Card
-            {
-                Rank = Rank.Ace
-            };
-            tournament.OurPlayer.Card2 = new Card
-            {
-                Rank = Rank.Ace
-            };
+            var tournament = CreateTournament(game);
 
             var probabilities = GetProbabilities();
-            
-            return Int32.MaxValue;
-            
-            
-           /* var card1String = tournament.OurPlayer.Card1.GetString();
+            var card1String = tournament.OurPlayer.Card1.GetString();
             var card2String = tournament.OurPlayer.Card1.GetString();
             var firstCombination = $"{card1String}{card2String}";
             var secondCombination = $"{card2String}{card1String}";
@@ -37,10 +25,10 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            return (int)(tournament.OurPlayer.Stack * probability);*/
+            return (int)(tournament.OurPlayer.Stack * probability);
         }
 
-        public static Dictionary<string, double> GetProbabilities()
+        private static Dictionary<string, double> GetProbabilities()
         {
             var dict = new Dictionary<string, double>();
             dict.Add("AA", 39.32);
@@ -321,6 +309,31 @@ namespace Nancy.Simple.Logic
         {
             public Rank Rank { get; set; }
             public string Color { get; set; }
+
+            public string GetString()
+            {
+                if (Rank == Rank.Ace)
+                {
+                    return "A";
+                }
+
+                if (Rank == Rank.King)
+                {
+                    return "K";
+                }
+
+                if (Rank == Rank.Queen)
+                {
+                    return "Q";
+                }
+
+                if (Rank == Rank.Jack)
+                {
+                    return "J";
+                }
+
+                return ((int)Rank).ToString();
+            }
         }
     }
 }
