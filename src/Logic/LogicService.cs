@@ -261,7 +261,13 @@ namespace Nancy.Simple.Logic
         {
             var player = new Player();
 
+            if (playerJson == null)
+            {
+                Console.WriteLine("Player json is null");
+            }
+
             player.Bet = playerJson.bet;
+            
 
             if (playerJson.hole_cards.Count >= 2)
             {
