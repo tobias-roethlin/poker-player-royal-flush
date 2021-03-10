@@ -76,6 +76,7 @@
     <Compile Include="BusinessObject\Player.cs" />
     <Compile Include="Logic\LogicService.cs" />
     <Compile Include="Logic\PokerHandActionEvaluator.cs" />
+    <Compile Include="Logic\WinProbabilityEvaluator.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="App.cs" />
     <Compile Include="PokerPlayer.cs" />
