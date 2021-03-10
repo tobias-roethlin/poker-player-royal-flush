@@ -52,6 +52,10 @@
     <StartupObject>Nancy.Simple.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="Nancy">
       <HintPath>..\lib\Nancy.dll</HintPath>
@@ -65,13 +69,13 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Card.cs" />
+    <Compile Include="Game.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="PokerPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
