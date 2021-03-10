@@ -9,7 +9,7 @@ namespace Nancy.Simple.Logic
 {
     public static class LogicService
     {
-        public static int Bet()
+        public static int Bet(Game game)
         {
             var tournament = new Tournament();
 

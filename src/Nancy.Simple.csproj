@@ -70,10 +70,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BusinessObject\Card.cs" />
+    <Compile Include="BusinessObject\Game.cs" />
+    <Compile Include="BusinessObject\Player.cs" />
     <Compile Include="Logic\LogicService.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="App.cs" />
-    <Compile Include="Player.cs" />
     <Compile Include="PokerPlayer.cs" />
   </ItemGroup>
   <ItemGroup>
