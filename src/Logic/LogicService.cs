@@ -74,6 +74,7 @@ namespace Nancy.Simple.Logic
             var firstCardWithCommunityCards = new[] { tournament.OurPlayer.Card1 }.Union(tournament.CommunityCards);
             var secondCardWithCommunityCards = new[] { tournament.OurPlayer.Card2 }.Union(tournament.CommunityCards);
             var ourCards = tournament.OurPlayer.GetCards();
+            var ourCardsWIthCommunityCards = ourCards.Union(tournament.CommunityCards);
 
             if (IsStraightFlush(firstCardWithCommunityCards) || IsStraightFlush(secondCardWithCommunityCards)
                 || IsFullHouse(firstCardWithCommunityCards) || IsFullHouse(secondCardWithCommunityCards)
@@ -82,7 +83,7 @@ namespace Nancy.Simple.Logic
                 betValue = Math.Max(betValue, tournament.Pot * 2);
                 considerAllIn = true;
             }
-            else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards)) && !IsFlush(tournament.CommunityCards))
+            else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards) || IsFlush(ourCardsWIthCommunityCards)) && !IsFlush(tournament.CommunityCards))
             {
                 betValue = tournament.Pot * 1.5;
                 considerAllIn = true;
