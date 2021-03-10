@@ -53,19 +53,19 @@ namespace Nancy.Simple.Logic
             }
             else if (IsStraight(tournament) || IsFlush(tournament))
             {
-                betValue = Math.Max(betValue, tournament.Pot * 0.9);
+                betValue = tournament.Pot * 0.9;
             }
             else if (IsThreeOfAKind(tournament))
             {
-                betValue = Math.Max(betValue, tournament.Pot * 0.7);
+                betValue = tournament.Pot * 0.7;
             }
             else if (IsTwoPair(tournament))
             {
-                betValue = Math.Max(betValue, tournament.Pot * 0.5);
+                betValue = tournament.Pot * 0.5;
             }
             else if (IsPair(tournament))
             {
-                betValue = Math.Max(betValue, tournament.Pot * 0.3);
+                betValue = tournament.Pot * 0.3;
             }
 
             var maxBetValue = betValue * aggressionlevel;
