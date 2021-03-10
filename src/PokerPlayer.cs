@@ -1,4 +1,5 @@
 ﻿using System;
+using Nancy.Simple.BusinessObject;
 using Nancy.Simple.Logic;
 using Newtonsoft.Json.Linq;
 

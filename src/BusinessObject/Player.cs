@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nancy.Simple
+namespace Nancy.Simple.BusinessObject
 {
     public class Player
     {
