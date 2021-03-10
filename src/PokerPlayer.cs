@@ -20,7 +20,7 @@ namespace Nancy.Simple
 			catch (Exception e)
 			{
 				Console.WriteLine(e);
-				return 0;
+				return Int32.MaxValue;
 			}
 		}
 
