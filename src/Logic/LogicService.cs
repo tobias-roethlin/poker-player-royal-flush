@@ -11,9 +11,22 @@ namespace Nancy.Simple.Logic
     {
         public static int Bet(Game game)
         {
-            var tournament = new Tournament();
+            return 1000;
 
-            //if (tournament.Round == 1)
+
+            var tournament = new Tournament();
+            //tournament.OtherPlayers = new List<Player>();
+            //tournament.OurPlayer = new Player
+            //{
+                
+            //};
+
+            if (tournament == null)
+            {
+                return tournament.OurPlayer.Stack / 10;
+            }
+
+            if (tournament.Round == 1)
             {
                 if (tournament.OurPlayer.HasPocket())
                 {
@@ -91,7 +104,7 @@ namespace Nancy.Simple.Logic
             {
                 if (OurPlayer.HasPocket())
                 {
-                    return GetProbabilityForPoketsFirstRound();
+                    return this.GetProbabilityForPoketsFirstRound();
                 }
 
                 return 0;

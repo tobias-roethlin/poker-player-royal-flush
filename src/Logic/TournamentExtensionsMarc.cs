@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Nancy.Simple.Logic
 {
-    public static class TournamentExtensions
+    public static class TournamentExtensionsMarc
     {
         public static double GetProbabilityForPoketsFirstRound(this LogicService.Tournament tournament)
         {
