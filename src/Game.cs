@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Nancy.Simple.Logic;
 
 namespace Nancy.Simple
 {
