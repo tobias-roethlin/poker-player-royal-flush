@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Nancy.Simple.BusinessObject;
 
@@ -9,7 +8,7 @@ namespace Nancy.Simple.Logic
     {
         public static int Bet(Game game)
         {
-            var tournament = CreateTournament(game);
+            var tournament = Mapper.CreateTournament(game);
 
             var higherCard = GetHigherCard(tournament.OurPlayer.Card1, tournament.OurPlayer.Card2);
             var lowerCard = higherCard == tournament.OurPlayer.Card1 ? tournament.OurPlayer.Card2 : tournament.OurPlayer.Card1;
@@ -30,7 +29,9 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
-            var probabilities = WinProbabilityEvaluator.GetInitialProbabilities(1 + tournament.OtherPlayers.Count(p => p.Status == "active"));
+            var numberOfPlayers = 1 + tournament.OtherPlayers.Count(p => p.Status == "active");
+            var aggressionlevel = GetAggressionLevel(numberOfPlayers);
+            var probabilities = WinProbabilityEvaluator.GetInitialProbabilities(numberOfPlayers);
             double probability = 0;
             if (!probabilities.TryGetValue(firstCombination, out probability))
             {
@@ -194,25 +195,17 @@ namespace Nancy.Simple.Logic
             }
 
             return card2;
-        }    
+        }
 
-        private static Tournament CreateTournament(Game game)
+        public static double GetAggressionLevel(int playerCount)
         {
-            var tournament = new Tournament();
-            
-            tournament.Round = game.round;
-            tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
-            tournament.OtherPlayers = game.players.Where(p => p.name != "Royal Flush").Select(PlayerMapper).ToList();
-            tournament.CurrentBuyIn = game.current_buy_in;
-            tournament.Pot = game.pot;
-
-            var ourPlayer = game.players.SingleOrDefault(p => p.name == "Royal Flush");
-            if (ourPlayer != null)
+            switch (playerCount)
             {
-                tournament.OurPlayer = PlayerMapper( ourPlayer);
+                case 2: return 3;
+                case 3: return 2.5;
+                case 4: return 2.2;
+                default: return 2;
             }
-
-            return tournament;
         }
 
         public static Player PlayerMapper(BusinessObject.Player playerJson)
@@ -289,16 +282,6 @@ namespace Nancy.Simple.Logic
             public int Round { get; set; }
             public int CurrentBuyIn { get; set; }
             public int Pot { get; set; }
-
-            public IEnumerable<Card> GetCards()
-            {
-                yield return OurPlayer.Card1;
-                yield return OurPlayer.Card2;
-                foreach (var card in CommunityCards)
-                {
-                    yield return card;
-                }
-            }
         }
 
         public class Player
