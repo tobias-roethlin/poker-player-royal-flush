@@ -271,8 +271,9 @@ namespace Nancy.Simple.Logic
             var player = new Player();
 
             player.Bet = playerJson.bet;
+            
 
-            if (playerJson.hole_cards.Count > 0)
+            if (playerJson.hole_cards.Count >= 2)
             {
                 player.Card1 = CardMapper(playerJson.hole_cards[0]);
                 player.Card2 = CardMapper(playerJson.hole_cards[1]);
