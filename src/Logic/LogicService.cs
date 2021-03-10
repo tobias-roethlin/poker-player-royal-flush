@@ -16,7 +16,7 @@ namespace Nancy.Simple.Logic
 
             var probabilities = GetProbabilities();
             var card1String = tournament.OurPlayer.Card1.GetString();
-            var card2String = tournament.OurPlayer.Card1.GetString();
+            var card2String = tournament.OurPlayer.Card2.GetString();
             var firstCombination = card1String + card2String;
             var secondCombination =  card2String + card1String;
             double probability = 0;
