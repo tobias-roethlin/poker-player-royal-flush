@@ -50,7 +50,7 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
-            return Math.Min(Math.Max(betValue, maxBetValue), tournament.OurPlayer.Stack);
+            return Math.Min(Math.Max(betValue, tournament.CurrentBuyIn), tournament.OurPlayer.Stack);
         }
 
         private static Card GetHigherCard(Card card1, Card card2)
