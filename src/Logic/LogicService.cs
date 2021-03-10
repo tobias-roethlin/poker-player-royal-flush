@@ -89,7 +89,7 @@ namespace Nancy.Simple.Logic
             }
             else if (IsThreeOfAKind(tournament.GetCards()) && (IsPair(firstCardWithCommunityCards) || IsPair(secondCardWithCommunityCards)))
             {
-                betValue = tournament.Pot;
+                betValue = tournament.Pot * 1.5;
             }
             else if (IsTwoPair(ourCardsWithCommunityCards) && !IsPair(communityCards))
             {
