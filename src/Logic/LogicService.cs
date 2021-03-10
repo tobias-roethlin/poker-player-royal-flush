@@ -41,7 +41,7 @@ namespace Nancy.Simple.Logic
 
             var considerAllIn = false;
             var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
-            if (probability > 0.5)
+            if (tournament.Round == 0 && probability > 0.5)
             {
                 betValue = Math.Max(betValue, tournament.Pot * 0.5);
             }
