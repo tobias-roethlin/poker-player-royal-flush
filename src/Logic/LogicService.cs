@@ -37,7 +37,7 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            var betValue = (int)(tournament.OurPlayer.Stack * (1.0 / 100 * probability));
+            var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability);
             var maxBetValue = betValue * 2;
 
             if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
@@ -50,7 +50,7 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
-            return Math.Min(Math.Max(betValue, tournament.CurrentBuyIn), tournament.OurPlayer.Stack);
+            return Math.Min(Math.Max((int)betValue, tournament.CurrentBuyIn), tournament.OurPlayer.Stack);
         }
 
         private static Card GetHigherCard(Card card1, Card card2)
