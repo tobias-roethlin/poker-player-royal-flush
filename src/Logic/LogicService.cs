@@ -72,15 +72,20 @@ namespace Nancy.Simple.Logic
 
             if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
             {
-                return 0;
+                return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
             }
 
             if (!considerAllIn && maxBetValue < tournament.CurrentBuyIn)
             {
-                return 0;
+                return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
             }
 
             return (int)Math.Min(Math.Max((int)betValue, tournament.CurrentBuyIn), considerAllIn ? tournament.OurPlayer.Stack : tournament.OurPlayer.Stack * 0.7);
+        }
+
+        private static bool ConsiderFold(Tournament tournament)
+        {
+            return tournament.OurPlayer.Bet < tournament.OurPlayer.Stack;
         }
 
         private static bool IsFourOfAKind(Tournament tournament)
