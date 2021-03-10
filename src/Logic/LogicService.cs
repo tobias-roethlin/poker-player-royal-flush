@@ -69,17 +69,18 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 0.9;
             }
+            else if (IsThreeOfAKind(tournament.GetCards())
+                && (IsPair(new[] { tournament.OurPlayer.Card1 }.Union(tournament.CommunityCards)) || IsPair(new[] { tournament.OurPlayer.Card2 }.Union(tournament.CommunityCards))))
+            {
+                betValue = tournament.Pot * 0.9;
+            }
             else if (IsTwoPair(tournament.GetCards())
                 && IsPair(tournament.OurPlayer.GetCards()))
             {
                 betValue = tournament.Pot * 0.9;
             }
-            else if (IsThreeOfAKind(tournament.GetCards()))
-            {
-                betValue = tournament.Pot * 0.7;
-            }
-            else if ((IsPair(new[] { tournament.OurPlayer.Card1 }.Union(tournament.GetCards())) || IsPair(new[] { tournament.OurPlayer.Card2 }.Union(tournament.GetCards())))
-                && !IsPair(tournament.GetCards()))
+            else if ((IsPair(new[] { tournament.OurPlayer.Card1 }.Union(tournament.CommunityCards)) || IsPair(new[] { tournament.OurPlayer.Card2 }.Union(tournament.CommunityCards)))
+                && !IsPair(tournament.CommunityCards))
             {
                 betValue = tournament.Pot * 0.5;
             }
