@@ -74,8 +74,13 @@
     <Compile Include="BusinessObject\Card.cs" />
     <Compile Include="BusinessObject\Game.cs" />
     <Compile Include="BusinessObject\Player.cs" />
+    <Compile Include="Logic\Card.cs" />
     <Compile Include="Logic\LogicService.cs" />
+    <Compile Include="Logic\Mapper.cs" />
+    <Compile Include="Logic\Player.cs" />
     <Compile Include="Logic\PokerHandActionEvaluator.cs" />
+    <Compile Include="Logic\Rank.cs" />
+    <Compile Include="Logic\Tournament.cs" />
     <Compile Include="Logic\WinProbabilityEvaluator.cs" />
     <Compile Include="MainModule.cs" />
     <Compile Include="App.cs" />
