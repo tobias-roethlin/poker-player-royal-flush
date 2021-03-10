@@ -19,6 +19,7 @@ namespace Nancy.Simple
 			}
 			catch (Exception e)
 			{
+				Console.WriteLine(gameState);
 				Console.WriteLine(e);
 				return Int32.MaxValue;
 			}
