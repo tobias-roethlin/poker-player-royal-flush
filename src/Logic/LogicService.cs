@@ -37,27 +37,35 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
+            var considerAllIn = false;
+            var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability);
             if (probability > 0.5)
             {
                 betValue = Math.Max(betValue, tournament.Pot * 0.5);
             }
 
-            if (IsFullHouse(tournament) || IsFourOfAKind(tournament))
+            if (IsStraightFlush(tournament) || IsFullHouse(tournament) || IsFourOfAKind(tournament))
             {
-                betValue = Math.Max(betValue, tournament.OurPlayer.Stack);
+                betValue = Math.Max(betValue, tournament.Pot);
+                considerAllIn = true;
             }
             else if (IsThreeOfAKind(tournament))
             {
-                betValue = Math.Max(betValue, tournament.OurPlayer.Stack * 0.9);
+                betValue = Math.Max(betValue, tournament.Pot * 0.9);
+                considerAllIn = true;
             }
-            else if (IsTwoPair(tournament) || IsStraight(tournament) || IsFlush(tournament))
+            else if (IsStraight(tournament) || IsFlush(tournament))
             {
-                betValue = Math.Max(betValue, tournament.OurPlayer.Stack * 0.8);
+                betValue = Math.Max(betValue, tournament.Pot * 0.8);
+                considerAllIn = true;
+            }
+            else if (IsTwoPair(tournament))
+            {
+                betValue = Math.Max(betValue, tournament.Pot * 0.5);
             }
             else if (IsPair(tournament))
             {
-                betValue = Math.Max(betValue, tournament.OurPlayer.Stack * 0.3);
+                betValue = Math.Max(betValue, tournament.Pot * 0.3);
             }
 
             var maxBetValue = betValue * 2;
@@ -67,7 +75,7 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
-            if (maxBetValue < tournament.CurrentBuyIn)
+            if (!considerAllIn && maxBetValue < tournament.CurrentBuyIn)
             {
                 return 0;
             }
@@ -93,7 +101,7 @@ namespace Nancy.Simple.Logic
 
         private static bool IsTwoPair(Tournament tournament)
         {
-            return tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 2).Count() == 2;
+            return tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 2).Count() >= 2;
         }
 
         private static bool IsPair(Tournament tournament)
@@ -101,21 +109,12 @@ namespace Nancy.Simple.Logic
             return tournament.GetCards().GroupBy(c => c.Rank).Any(g => g.Count() == 2);
         }
 
-        private static bool IsFlush(Tournament tournament)
+        private static bool IsStraightFlush(Tournament tournament)
         {
-            return tournament.GetCards().GroupBy(c => c.Color).Any(g => g.Count() >= 5);
-        }
-
-        private static bool IsStraight(Tournament tournament)
-        {
-            var orderedRanks = GetRanks(tournament).OrderBy(e => e);
-            for (int i = 1; i < 14; i++)
+            var sameColorCards = tournament.GetCards().GroupBy(c => c.Color);
+            foreach (var group in sameColorCards)
             {
-                if (orderedRanks.Contains(i)
-                    && orderedRanks.Contains(i + 1)
-                    && orderedRanks.Contains(i + 2)
-                    && orderedRanks.Contains(i + 3)
-                    && orderedRanks.Contains(i + 4))
+                if (IsStraight(group) && IsFlush(group))
                 {
                     return true;
                 }
@@ -124,11 +123,57 @@ namespace Nancy.Simple.Logic
             return false;
         }
 
-        private static HashSet<int> GetRanks(Tournament tournament)
+        private static bool IsFlush(IEnumerable<Card> card)
+        {
+            return card.GroupBy(c => c.Color).Any(g => g.Count() >= 5);
+        }
+
+        private static bool IsFlush(Tournament tournament)
+        {
+            return IsFlush(tournament.GetCards());
+        }
+
+        private static bool IsStraight(Tournament tournament)
+        {
+            var ranks = GetRanks(tournament.GetCards());
+            for (int i = 1; i < 14; i++)
+            {
+                if (ranks.Contains(i)
+                    && ranks.Contains(i + 1)
+                    && ranks.Contains(i + 2)
+                    && ranks.Contains(i + 3)
+                    && ranks.Contains(i + 4))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsStraight(IEnumerable<Card> cards)
+        {
+            var ranks = GetRanks(cards);
+            for (int i = 1; i < 14; i++)
+            {
+                if (ranks.Contains(i)
+                    && ranks.Contains(i + 1)
+                    && ranks.Contains(i + 2)
+                    && ranks.Contains(i + 3)
+                    && ranks.Contains(i + 4))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static HashSet<int> GetRanks(IEnumerable<Card> cards)
         {
             var set = new HashSet<int>();
 
-            foreach (var card in tournament.GetCards())
+            foreach (var card in cards)
             {
                 set.Add((int)card.Rank);
             }
