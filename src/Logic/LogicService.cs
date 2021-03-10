@@ -126,16 +126,17 @@ namespace Nancy.Simple.Logic
             
             if (tournament.OurPlayer.Bet == 0 || probability > 0.2)
             {
-                betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
+                return (int) (tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2));
             }
-            else if (ConsiderFold(tournament))
+            
+            if (ConsiderFold(tournament))
             {
                 return 0;
             }
 
             if (probability > 0.5)
             {
-                betValue = Math.Max(betValue, tournament.Pot * 0.5);
+                return (int) Math.Max(betValue, tournament.Pot * 0.5);
             }
 
             if (betValue < tournament.CurrentBuyIn)
