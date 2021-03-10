@@ -6,12 +6,12 @@ namespace Nancy.Simple.Logic
 {
     public static class PokerHandActionEvaluator
     {
-        static PokerAction GetActionBasendOnHandCards(Card higherCard, Card lowerCard)
+        public static PokerAction GetActionBasendOnHandCards(Card higherCard, Card lowerCard)
         {
             return higherCard.Color == lowerCard.Color ? GetActionForSuitedCards(higherCard, lowerCard) : GetActionForUnsuitedCards(higherCard, lowerCard);
         }
 
-        static PokerAction GetActionForSuitedCards(Card higherCard, Card lowerCard)
+        public static PokerAction GetActionForSuitedCards(Card higherCard, Card lowerCard)
         {
             switch (higherCard.Rank)
             {
@@ -45,7 +45,7 @@ namespace Nancy.Simple.Logic
                     throw new ArgumentOutOfRangeException();
             }
         }
-        static PokerAction GetActionForUnsuitedCards(Card higherCard, Card lowerCard)
+        public static PokerAction GetActionForUnsuitedCards(Card higherCard, Card lowerCard)
         {
             switch (higherCard.Rank)
             {

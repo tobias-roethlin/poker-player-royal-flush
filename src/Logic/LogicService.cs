@@ -25,6 +25,12 @@ namespace Nancy.Simple.Logic
                 secondCombination += "s";
             }
 
+            var action = PokerHandActionEvaluator.GetActionBasendOnHandCards(higherCard, lowerCard);
+            if (action == PokerAction.Fold)
+            {
+                return 0;
+            }
+
             double probability = 0;
             if (!probabilities.TryGetValue(firstCombination, out probability))
             {
