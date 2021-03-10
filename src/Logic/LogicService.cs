@@ -107,6 +107,10 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 0.5;
             }
+            else if (!WeHaveHighestCard(tournament) && ConsiderFold(tournament))
+            {
+                betValue = 0;
+            }
             
             if (WeHaveHighestCard(tournament))
             {
