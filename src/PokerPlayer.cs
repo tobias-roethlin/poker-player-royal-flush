@@ -10,7 +10,6 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
-			return Int32.MaxValue;
 			Game game = gameState.ToObject<Game>();
 			
 			return LogicService.Bet(game);
