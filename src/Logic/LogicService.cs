@@ -71,6 +71,7 @@ namespace Nancy.Simple.Logic
             tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
             tournament.OtherPlayers = game.players.Where(p => p.name != "Royal Flush").Select(PlayerMapper).ToList();
             tournament.CurrentBuyIn = game.current_buy_in;
+            tournament.Pot = game.pot;
 
             var ourPlayer = game.players.SingleOrDefault(p => p.name == "Royal Flush");
             if (ourPlayer != null)
@@ -154,6 +155,7 @@ namespace Nancy.Simple.Logic
             public Player OurPlayer { get; set; }
             public int Round { get; set; }
             public int CurrentBuyIn { get; set; }
+            public int Pot { get; set; }
         }
 
         public class Player
