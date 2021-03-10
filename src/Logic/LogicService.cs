@@ -88,6 +88,11 @@ namespace Nancy.Simple.Logic
                 betValue = Math.Max(betValue, tournament.Pot * 1.4);
                 considerAllIn = true;
             }
+            else if (IsTwoPair(firstCardWithCommunityCards) && IsTwoPair(secondCardWithCommunityCards) && !IsPair(communityCards))
+            {
+                betValue = tournament.Pot * 1.4;
+                considerAllIn = true;
+            }
             else if (IsThreeOfAKind(tournament.GetCards()) && IsPair(ourCards))
             {
                 betValue = tournament.Pot * 1.1;
@@ -96,11 +101,15 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 1.1;
             }
+            else if (IsTwoPair(ourCardsWithCommunityCards) && IsPair(ourCards) && WeHaveHighestCard(tournament))
+            {
+                betValue = tournament.Pot * 0.3;
+            }
             else if (IsTwoPair(tournament.GetCards()) && IsPair(ourCards))
             {
-                betValue = tournament.Pot * 0.8;
+                betValue = tournament.Pot;
             }
-            else if (IsTwoPair(firstCardWithCommunityCards) && IsTwoPair(secondCardWithCommunityCards) && !IsTwoPair(communityCards))
+            else if (IsTwoPair(ourCardsWithCommunityCards) && IsPair(ourCards))
             {
                 betValue = tournament.Pot * 0.8;
             }
