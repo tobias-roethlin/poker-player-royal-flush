@@ -8,7 +8,12 @@ namespace Nancy.Simple.Logic
 {
     public static class TournamentExtensionsMarc
     {
-        public static double GetProbabilityForPoketsFirstRound(this LogicService.Tournament tournament)
+        public static double GetProbabilityForSameRankFirstRound(this LogicService.Tournament tournament)
+        {
+            return 0;
+        }
+
+        public static double SameRankFirstRound(this LogicService.Tournament tournament)
         {
             return 0;
         }

@@ -14,32 +14,32 @@ namespace Nancy.Simple.Logic
             return 1000;
 
 
-            var tournament = new Tournament();
-            //tournament.OtherPlayers = new List<Player>();
-            //tournament.OurPlayer = new Player
-            //{
+            //var tournament = new Tournament();
+            ////tournament.OtherPlayers = new List<Player>();
+            ////tournament.OurPlayer = new Player
+            ////{
                 
-            //};
+            ////};
 
-            if (tournament == null)
-            {
-                return tournament.OurPlayer.Stack / 10;
-            }
+            //if (tournament == null)
+            //{
+            //    return tournament.OurPlayer.Stack / 10;
+            //}
 
-            if (tournament.Round == 1)
-            {
-                if (tournament.OurPlayer.HasPocket())
-                {
-                    return tournament.OurPlayer.Stack;
-                }
+            //if (tournament.Round == 1)
+            //{
+            //    if (tournament.OurPlayer.SameRank())
+            //    {
+            //        return tournament.OurPlayer.Stack;
+            //    }
 
-                if (tournament.OurPlayer.HasSuited())
-                {
-                    return tournament.OurPlayer.Stack / 4;
-                }
-            }
+            //    if (tournament.OurPlayer.SameColor())
+            //    {
+            //        return tournament.OurPlayer.Stack / 4;
+            //    }
+            //}
 
-            return tournament.OurPlayer.Stack / 10;
+            //return tournament.OurPlayer.Stack / 10;
         }
 
         //private double ProbabilityBeingDealtWithStartingHandPercent(Card card1, Card card2)
@@ -102,12 +102,17 @@ namespace Nancy.Simple.Logic
             public int Round { get; set; }
             public double GetProbabilityOfBeingBetFirstRound()
             {
-                if (OurPlayer.HasPocket())
+                if (OurPlayer.SameRank())
                 {
-                    return this.GetProbabilityForPoketsFirstRound();
+                    return this.SameRankFirstRound();
                 }
 
-                return 0;
+                if (OurPlayer.SameColor())
+                {
+                    return this.SameColorFirstRound();
+                }
+
+                return this.FirstRound();
             }
         }
 
@@ -120,12 +125,12 @@ namespace Nancy.Simple.Logic
             public Card Card1 { get; set; }
             public Card Card2 { get; set; }
 
-            public bool HasPocket()
+            public bool SameRank()
             {
                 return Card1.Rank == Card2.Rank;
             }
 
-            public bool HasSuited()
+            public bool SameColor()
             {
                 return Card1.Color == Card2.Color;
             }

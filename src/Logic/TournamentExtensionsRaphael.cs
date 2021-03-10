@@ -8,6 +8,14 @@ namespace Nancy.Simple.Logic
 {
     public static class TournamentExtensionsRaphael
     {
+        public static double SameColorFirstRound(this LogicService.Tournament tournament)
+        {
+            return 0;
+        }
 
+        public static double FirstRound(this LogicService.Tournament tournament)
+        {
+            return 0;
+        }
     }
 }
