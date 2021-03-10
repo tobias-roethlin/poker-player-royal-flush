@@ -73,12 +73,12 @@ namespace Nancy.Simple.Logic
                 betValue = tournament.Pot * 2;
                 considerAllIn = true;
             }
-            else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards) || IsFlush(ourCardsWithCommunityCards)) && !IsFlush(communityCards))
+            else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards)) && !IsFlush(communityCards))
             {
                 betValue = tournament.Pot * 1.5;
                 considerAllIn = true;
             }
-            else if ((IsStraight(firstCardWithCommunityCards) || IsStraight(secondCardWithCommunityCards) || IsStraight(ourCardsWithCommunityCards)) && !IsStraight(communityCards))
+            else if ((IsStraight(firstCardWithCommunityCards) || IsStraight(secondCardWithCommunityCards)) && !IsStraight(communityCards))
             {
                 betValue = tournament.Pot * 1.5;
                 considerAllIn = true;
