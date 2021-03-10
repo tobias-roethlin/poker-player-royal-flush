@@ -25,7 +25,7 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            return (int)(tournament.OurPlayer.Stack * 1.0 / 100 * probability);
+            return (int)(tournament.OurPlayer.Stack * (1.0 / 100 * probability));
         }
 
         private static Dictionary<string, double> GetProbabilities()
