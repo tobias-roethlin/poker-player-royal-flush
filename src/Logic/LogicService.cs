@@ -136,6 +136,8 @@ namespace Nancy.Simple.Logic
             var isFirstBet = tournament.OurPlayer.Bet == 0;
             var isPotCommitted = !ConsiderFold(tournament);
             var Fold = 0;
+            var Call = tournament.CurrentBuyIn;
+            var probabilityDecimal = probability / 100;
             
             var action = PokerHandActionEvaluator.GetActionBasendOnHandCards(higherCard, lowerCard);
             
@@ -146,7 +148,7 @@ namespace Nancy.Simple.Logic
             
             if (isFirstBet)
             {
-                return (int) (tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2));
+                return (int) (tournament.OurPlayer.Stack * (probabilityDecimal / 2));
             }
 
             if (probability > 0.5)
@@ -156,12 +158,19 @@ namespace Nancy.Simple.Logic
             
             if (probability > 0.2)
             {
-                return (int) (tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2));
+                var maxBet = (int) (tournament.OurPlayer.Stack * probabilityDecimal);
+                
+                if (maxBet < Call)
+                {
+                    return Fold;
+                }
+
+                return maxBet;
             }
 
             if (isPotCommitted)
             {
-                return tournament.CurrentBuyIn;
+                return Call;
             }
 
             return Fold;
