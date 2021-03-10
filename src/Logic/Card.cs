@@ -27,6 +27,11 @@ namespace Nancy.Simple.Logic
                 return "J";
             }
 
+            if (Rank == Rank._10)
+            {
+                return "T";
+            }
+
             return ((int)Rank).ToString();
         }
     }
