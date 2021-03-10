@@ -1470,5 +1470,158 @@ namespace Nancy.Simple.Logic
 
             return dict;
         }
+
+        private static Tournament CreateTournament(Game game)
+        {
+            var tournament = new Tournament();
+            
+            tournament.Round = game.round;
+
+            if (game.community_cards != null)
+            {
+                tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
+            }
+            else
+            {
+                tournament.CommunityCards = new List<Card>();
+            }
+            
+            tournament.OtherPlayers = game.players.Where(p => p.name != "Royal Flush").Select(PlayerMapper).ToList();
+            tournament.CurrentBuyIn = game.current_buy_in;
+
+            var ourPlayer = game.players.SingleOrDefault(p => p.name == "Royal Flush");
+            if (ourPlayer != null)
+            {
+                tournament.OurPlayer = PlayerMapper( ourPlayer);
+            }
+
+            return tournament;
+        }
+
+        public static Player PlayerMapper(BusinessObject.Player playerJson)
+        {
+            var player = new Player();
+
+            player.Bet = playerJson.bet;
+            
+            if (playerJson.hole_cards != null && playerJson.hole_cards.Count >= 2)
+            {
+                player.Card1 = CardMapper(playerJson.hole_cards[0]);
+                player.Card2 = CardMapper(playerJson.hole_cards[1]);
+            }
+
+            player.Name = playerJson.name;
+            player.Stack = int.Parse(playerJson.stack);
+            player.Status = playerJson.status;
+            
+            return player;
+        }
+
+        public static Card CardMapper( BusinessObject.Card cardJson)
+        {
+            var card = new Card();
+            card.Color = cardJson.suit;
+            card.Rank = StringToRankMapper(cardJson.rank);
+            return card;
+        }
+                
+        public static Rank StringToRankMapper(string rankString)
+        {
+            switch (rankString)
+            {
+                case "A": return Rank.Ace;
+                case "K": return Rank.King;
+                case "Q": return Rank.Queen;
+                case "J": return Rank.Jack;
+                case "10": return Rank._10;
+                case "9": return Rank._9;
+                case "8": return Rank._8;
+                case "7": return Rank._7;
+                case "6": return Rank._6;
+                case "5": return Rank._5;
+                case "4": return Rank._4;
+                case "3": return Rank._3;
+                case "2": return Rank._2;
+            }
+
+            throw new NotImplementedException();
+        }
+        
+        public enum Rank
+        {
+            Ace = 14,
+            King = 13,
+            Queen = 12,
+            Jack = 11,
+            _10 = 10,
+            _9 = 9,
+            _8 = 8,
+            _7 = 7,
+            _6 = 6,
+            _5 = 5,
+            _4 = 4,
+            _3 = 3,
+            _2 = 2
+        }
+
+        public class Tournament
+        {
+            public List<Card> CommunityCards { get; set; }
+            public List<Player> OtherPlayers { get; set; }
+            public Player OurPlayer { get; set; }
+            public int Round { get; set; }
+            public int CurrentBuyIn { get; set; }
+        }
+
+        public class Player
+        {
+            public string Name { get; set; }
+            public int Stack { get; set; }
+            public string Status { get; set; }
+            public int Bet { get; set; }
+            public Card Card1 { get; set; }
+            public Card Card2 { get; set; }
+
+            public bool SameRank()
+            {
+                return Card1.Rank == Card2.Rank;
+            }
+
+            public bool SameColor()
+            {
+                return Card1.Color == Card2.Color;
+            }
+        }
+
+        public class Card
+        {
+            public Rank Rank { get; set; }
+            public string Color { get; set; }
+
+            public string GetString()
+            {
+                if (Rank == Rank.Ace)
+                {
+                    return "A";
+                }
+
+                if (Rank == Rank.King)
+                {
+                    return "K";
+                }
+
+                if (Rank == Rank.Queen)
+                {
+                    return "Q";
+                }
+
+                if (Rank == Rank.Jack)
+                {
+                    return "J";
+                }
+
+                return ((int)Rank).ToString();
+            }
+        }
     }
 }
