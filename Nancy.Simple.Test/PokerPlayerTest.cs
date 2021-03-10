@@ -54,10 +54,10 @@ namespace Nancy.Simple.Test
             var json = JObject.Parse(jsonString);
             
             // Act
-            int temp = PokerPlayer.BetRequest(json);
+            int result = PokerPlayer.BetRequest(json);
 
             // Assert
-            Assert.Equals(temp, 48.2);
+            Assert.Equals(result, 39);
         }
     }
 }

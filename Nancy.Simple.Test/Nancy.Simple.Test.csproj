@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="PokerPlayerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Test2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

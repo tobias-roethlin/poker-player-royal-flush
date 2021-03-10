@@ -244,7 +244,16 @@ namespace Nancy.Simple.Logic
             var tournament = new Tournament();
             
             tournament.Round = game.round;
-            tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
+
+            if (game.community_cards != null)
+            {
+                tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
+            }
+            else
+            {
+                tournament.CommunityCards = new List<Card>();
+            }
+            
             tournament.OtherPlayers = game.players.Where(p => p.name != "Royal Flush").Select(PlayerMapper).ToList();
             tournament.CurrentBuyIn = game.current_buy_in;
 
