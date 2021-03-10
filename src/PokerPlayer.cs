@@ -1,4 +1,5 @@
 ﻿using System;
+using Nancy.Simple.Logic;
 using Newtonsoft.Json.Linq;
 
 namespace Nancy.Simple
@@ -9,10 +10,10 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
-			
+			return LogicService.Bet();
 			
 			//TODO: Use this method to return the value You want to bet
-			return Int32.MaxValue;
+			//return Int32.MaxValue;
 		}
 
 		public static void ShowDown(JObject gameState)
