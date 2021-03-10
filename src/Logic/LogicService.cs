@@ -107,6 +107,11 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 0.5;
             }
+            
+            if (WeHaveHighestCard(tournament))
+            {
+                betValue = betValue *= 2;
+            }
 
             var maxBetValue = betValue * aggressionlevel;
 
@@ -153,6 +158,24 @@ namespace Nancy.Simple.Logic
             }
 
             return (int) betValue;
+        }
+
+        private static bool WeHaveHighestCard(Tournament tournament)
+        {
+            var ourCards = GetRanks(tournament.OurPlayer.GetCards());
+            var allCards = GetRanks(tournament.GetCards());
+
+            if (ourCards.Count == 0)
+            {
+                return true;
+            }
+
+            if (allCards.Count == 0)
+            {
+                return true;
+            }
+
+            return ourCards.Max() >= allCards.Max();
         }
 
         private static bool ConsiderFold(Tournament tournament)

@@ -38,11 +38,20 @@ namespace Nancy.Simple.Logic
 
         public IEnumerable<Card> GetCards()
         {
-            yield return OurPlayer.Card1;
-            yield return OurPlayer.Card2;
-            foreach (var card in CommunityCards)
+            if (OurPlayer.Card1 != null)
             {
-                yield return card;
+                yield return OurPlayer.Card1;
+            }
+            if (OurPlayer.Card2 != null)
+            {
+                yield return OurPlayer.Card2;
+            }
+            if (CommunityCards != null)
+            {
+                foreach (var card in CommunityCards)
+                {
+                    yield return card;
+                }
             }
         }
     }
