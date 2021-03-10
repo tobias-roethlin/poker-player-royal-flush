@@ -37,7 +37,20 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            return (int)(tournament.OurPlayer.Stack * (1.0 / 100 * probability));
+            var betValue = (int)(tournament.OurPlayer.Stack * (1.0 / 100 * probability));
+            var maxBetValue = betValue * 2;
+
+            if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
+            {
+                return 0;
+            }
+
+            if (maxBetValue < tournament.CurrentBuyIn)
+            {
+                return 0;
+            }
+
+            return Math.Min(Math.Max(betValue, maxBetValue), tournament.OurPlayer.Stack);
         }
 
         private static Card GetHigherCard(Card card1, Card card2)
@@ -233,6 +246,7 @@ namespace Nancy.Simple.Logic
             tournament.Round = game.round;
             tournament.CommunityCards = game.community_cards.Select(c => new Card {Color = c.suit, Rank = StringToRankMapper(c.rank)}).ToList();
             tournament.OtherPlayers = game.players.Where(p => p.name != "Royal Flush").Select(PlayerMapper).ToList();
+            tournament.CurrentBuyIn = game.current_buy_in;
 
             var ourPlayer = game.players.SingleOrDefault(p => p.name == "Royal Flush");
             if (ourPlayer != null)
@@ -315,6 +329,7 @@ namespace Nancy.Simple.Logic
             public List<Player> OtherPlayers { get; set; }
             public Player OurPlayer { get; set; }
             public int Round { get; set; }
+            public int CurrentBuyIn { get; set; }
         }
 
         public class Player
