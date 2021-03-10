@@ -87,6 +87,15 @@ namespace Nancy.Simple.Logic
             public List<Player> OtherPlayers { get; set; }
             public Player OurPlayer { get; set; }
             public int Round { get; set; }
+            public double GetProbabilityOfBeingBetFirstRound()
+            {
+                if (OurPlayer.HasPocket())
+                {
+                    return GetProbabilityForPoketsFirstRound();
+                }
+
+                return 0;
+            }
         }
 
         public class Player
