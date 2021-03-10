@@ -104,7 +104,7 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 0.8;
             }
-            else if ((IsPair(firstCardWithCommunityCards) || IsPair(secondCardWithCommunityCards)) && !IsPair(communityCards))
+            else if ((IsPair(firstCardWithCommunityCards) || IsPair(secondCardWithCommunityCards)) && !IsPair(communityCards) && WeHaveHighestCard(tournament))
             {
                 betValue = tournament.Pot * 0.5;
             }
