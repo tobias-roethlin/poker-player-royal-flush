@@ -11,7 +11,6 @@ namespace Nancy.Simple.Logic
         {
             var tournament = CreateTournament(game);
 
-            var probabilities = GetInitialProbabilities();
             var higherCard = GetHigherCard(tournament.OurPlayer.Card1, tournament.OurPlayer.Card2);
             var lowerCard = higherCard == tournament.OurPlayer.Card1 ? tournament.OurPlayer.Card2 : tournament.OurPlayer.Card1;
             var card1String = higherCard.GetString();
@@ -31,6 +30,7 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
+            var probabilities = GetInitialProbabilities();
             double probability = 0;
             if (!probabilities.TryGetValue(firstCombination, out probability))
             {
