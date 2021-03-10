@@ -1,22 +1,29 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 
-namespace Nancy.Simple
+namespace Nancy.Simple.Test
 {
-    class Program
+    [TestFixture]
+    public class PokerPlayerTest
     {
         [Test]
-        public void Temp()
+        public void AACase()
         {
-              var jsonString = @"{
+            // Arrange
+            var jsonString = @"{
                     ""players"":[
                             {
-                                ""name"":""Player 1"",
-                        ""stack"":1000,
+                        ""name"":""Royal Flush"",
+                        ""stack"":100,
                         ""status"":""active"",
                         ""bet"":0,
-                        ""hole_cards"":[],
+                        ""hole_cards"":[{
+                        ""rank"": ""A"",
+                        ""suit"": ""spades""
+                            },{
+                        ""rank"": ""A"",
+                        ""suit"": ""heards""
+                            }],
                         ""version"":""Version name 1"",
                         ""id"":0
                     },
@@ -44,10 +51,13 @@ namespace Nancy.Simple
                 ""pot"":0
             }";
     
-
-            JObject json = JObject.Parse(jsonString);
+            var json = JObject.Parse(jsonString);
             
-            Game album = json.ToObject<Game>();
+            // Act
+            int temp = PokerPlayer.BetRequest(json);
+
+            // Assert
+            Assert.Equals(temp, 48.2);
         }
     }
 }
