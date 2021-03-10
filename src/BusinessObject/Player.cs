@@ -12,7 +12,7 @@ namespace Nancy.Simple
         
         public int bet { get; set; }
 
-        public List<Card> hole_cards { get; set; } = new List<Card>();
+        public List<Card> hole_cards { get; set; }
         
         public string version { get; set; }
         
