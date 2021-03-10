@@ -11,9 +11,17 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
-			Game game = gameState.ToObject<Game>();
+			try
+			{
+				Game game = gameState.ToObject<Game>();
 			
-			return LogicService.Bet(game);
+				return LogicService.Bet(game);
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				return 0;
+			}
 			
 			
 			
