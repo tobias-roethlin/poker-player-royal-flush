@@ -38,6 +38,11 @@ namespace Nancy.Simple.Logic
             }
 
             var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability);
+            if (probability > 0.5)
+            {
+                betValue = Math.Max(betValue, tournament.Pot * 0.5);
+            }
+
             var maxBetValue = betValue * 2;
 
             if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
