@@ -18,17 +18,12 @@ namespace Nancy.Simple.Logic
             var firstCombination = card1String + card2String;
             var secondCombination =  card2String + card1String;
 
-            if (higherCard.Color == lowerCard.Color)
+            if (tournament.OurPlayer.SameColor())
             {
                 firstCombination += "s";
                 secondCombination += "s";
             }
 
-            var action = PokerHandActionEvaluator.GetActionBasendOnHandCards(higherCard, lowerCard);
-            if (tournament.IsPreFlop && action == PokerAction.Fold)
-            {
-                return 0;
-            }
 
             var numberOfPlayers = 1 + tournament.OtherPlayers.Count(p => p.Status == "active");
             var aggressionlevel = GetAggressionLevel(numberOfPlayers);
@@ -39,35 +34,17 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            if (tournament.IsPreFlop && probability < 0.2)
-            {
-                return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
-            }
-
-            var considerAllIn = false;
-            var betValue = 0.0;
             if (tournament.IsPreFlop)
             {
-                if (tournament.OurPlayer.Bet == 0 || probability > 0.2)
-                {
-                    betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
-                }
-                else if (ConsiderFold(tournament))
-                {
-                    return 0;
-                }
-
-                if (probability > 0.5)
-                {
-                    betValue = Math.Max(betValue, tournament.Pot * 0.5);
-                }
+                return HandlePreFlop(tournament, probability);
             }
-            else
+            
+            var considerAllIn = false;
+            var betValue = 0.0;
+        
+            if (tournament.OurPlayer.Bet == 0)
             {
-                if (tournament.OurPlayer.Bet == 0)
-                {
-                    betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
-                }
+                betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
             }
 
 
@@ -112,17 +89,48 @@ namespace Nancy.Simple.Logic
 
             var maxBetValue = betValue * aggressionlevel;
 
-            if (tournament.IsPreFlop && betValue < tournament.CurrentBuyIn)
-            {
-                return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
-            }
-
             if (!considerAllIn && maxBetValue < tournament.CurrentBuyIn)
             {
                 return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
             }
 
             return (int)Math.Min(Math.Max((int)betValue, tournament.CurrentBuyIn), considerAllIn ? tournament.OurPlayer.Stack : tournament.OurPlayer.Stack * 0.7);
+        }
+
+        private static int HandlePreFlop(Tournament tournament, double probability)
+        {
+            double betValue = 0;
+            
+            var higherCard = GetHigherCard(tournament.OurPlayer.Card1, tournament.OurPlayer.Card2);
+            var lowerCard = higherCard == tournament.OurPlayer.Card1 ? tournament.OurPlayer.Card2 : tournament.OurPlayer.Card1;
+            
+            var action = PokerHandActionEvaluator.GetActionBasendOnHandCards(higherCard, lowerCard);
+            
+            if (action == PokerAction.Fold)
+            {
+                return 0;
+            }
+            
+            if (tournament.OurPlayer.Bet == 0 || probability > 0.2)
+            {
+                betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
+            }
+            else if (ConsiderFold(tournament))
+            {
+                return 0;
+            }
+
+            if (probability > 0.5)
+            {
+                betValue = Math.Max(betValue, tournament.Pot * 0.5);
+            }
+
+            if (betValue < tournament.CurrentBuyIn)
+            {
+                return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
+            }
+
+            return (int) betValue;
         }
 
         private static bool ConsiderFold(Tournament tournament)
