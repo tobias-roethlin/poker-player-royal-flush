@@ -125,39 +125,41 @@ namespace Nancy.Simple.Logic
 
         private static int HandlePreFlop(Tournament tournament, double probability)
         {
-            double betValue = 0;
             
             var higherCard = GetHigherCard(tournament.OurPlayer.Card1, tournament.OurPlayer.Card2);
             var lowerCard = higherCard == tournament.OurPlayer.Card1 ? tournament.OurPlayer.Card2 : tournament.OurPlayer.Card1;
+            var isFirstBet = tournament.OurPlayer.Bet == 0;
+            var isPotCommitted = !ConsiderFold(tournament);
+            var Fold = 0;
             
             var action = PokerHandActionEvaluator.GetActionBasendOnHandCards(higherCard, lowerCard);
             
             if (action == PokerAction.Fold)
             {
-                return 0;
+                return Fold;
             }
             
-            if (tournament.OurPlayer.Bet == 0 || probability > 0.2)
+            if (isFirstBet)
             {
                 return (int) (tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2));
-            }
-            
-            if (ConsiderFold(tournament))
-            {
-                return 0;
             }
 
             if (probability > 0.5)
             {
-                return (int) Math.Max(betValue, tournament.Pot * 0.5);
+                return (int) (tournament.Pot * 0.5);
             }
-
-            if (betValue < tournament.CurrentBuyIn)
+            
+            if (probability > 0.2)
             {
-                return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
+                return (int) (tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2));
             }
 
-            return (int) betValue;
+            if (isPotCommitted)
+            {
+                return tournament.CurrentBuyIn;
+            }
+
+            return Fold;
         }
 
         private static bool WeHaveHighestCard(Tournament tournament)
