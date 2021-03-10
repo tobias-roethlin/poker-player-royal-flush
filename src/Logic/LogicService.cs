@@ -64,17 +64,24 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 0.9;
             }
-            else if (IsThreeOfAKind(tournament))
+            else if (IsThreeOfAKind(tournament.GetCards())
+                && IsPair(tournament.OurPlayer.GetCards()))
+            {
+                betValue = tournament.Pot * 0.9;
+            }
+            else if (IsTwoPair(tournament.GetCards())
+                && IsPair(tournament.OurPlayer.GetCards()))
+            {
+                betValue = tournament.Pot * 0.9;
+            }
+            else if (IsThreeOfAKind(tournament.GetCards()))
             {
                 betValue = tournament.Pot * 0.7;
             }
-            else if (IsTwoPair(tournament))
+            else if ((IsPair(new[] { tournament.OurPlayer.Card1 }.Union(tournament.GetCards())) || IsPair(new[] { tournament.OurPlayer.Card2 }.Union(tournament.GetCards())))
+                && !IsPair(tournament.GetCards()))
             {
                 betValue = tournament.Pot * 0.5;
-            }
-            else if (IsPair(tournament))
-            {
-                betValue = tournament.Pot * 0.3;
             }
 
             var maxBetValue = betValue * aggressionlevel;
@@ -108,19 +115,19 @@ namespace Nancy.Simple.Logic
                 && tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 3).Count() == 1;
         }
 
-        private static bool IsThreeOfAKind(Tournament tournament)
+        private static bool IsThreeOfAKind(IEnumerable<Card> cards)
         {
-            return tournament.GetCards().GroupBy(c => c.Rank).Any(g => g.Count() == 3);
+            return cards.GroupBy(c => c.Rank).Any(g => g.Count() == 3);
         }
 
-        private static bool IsTwoPair(Tournament tournament)
+        private static bool IsTwoPair(IEnumerable<Card> cards)
         {
-            return tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 2).Count() >= 2;
+            return cards.GroupBy(c => c.Rank).Where(g => g.Count() == 2).Count() >= 2;
         }
 
-        private static bool IsPair(Tournament tournament)
+        private static bool IsPair(IEnumerable<Card> cards)
         {
-            return tournament.GetCards().GroupBy(c => c.Rank).Any(g => g.Count() == 2);
+            return cards.GroupBy(c => c.Rank).Any(g => g.Count() == 2);
         }
 
         private static bool IsStraightFlush(Tournament tournament)

@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Collections.Generic;
+
 namespace Nancy.Simple.Logic
 {
     public class Player
@@ -8,6 +11,12 @@ namespace Nancy.Simple.Logic
         public int Bet { get; set; }
         public Card Card1 { get; set; }
         public Card Card2 { get; set; }
+
+        public IEnumerable<Card> GetCards()
+        {
+            yield return Card1;
+            yield return Card2;
+        }
 
         public bool SameRank()
         {
