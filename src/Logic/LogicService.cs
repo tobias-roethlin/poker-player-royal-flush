@@ -41,16 +41,16 @@ namespace Nancy.Simple.Logic
 
             var considerAllIn = false;
             var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
-            //if (tournament.Round > 0)
-            //{
-            //    betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
-            //}
-            //else
-            //{
-            //    betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
-            //}
+            if (tournament.IsPreFlop > 0)
+            {
+                betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
+            }
+            else
+            {
+                betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
+            }
 
-            if (tournament.Round == 0 && probability > 0.5)
+            if (tournament.IsPreFlop && probability > 0.5)
             {
                 betValue = Math.Max(betValue, tournament.Pot * 0.5);
             }
@@ -79,7 +79,7 @@ namespace Nancy.Simple.Logic
 
             var maxBetValue = betValue * aggressionlevel;
 
-            if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
+            if (tournament.IsPreFlop && betValue < tournament.CurrentBuyIn)
             {
                 return ConsiderFold(tournament) ? 0 : tournament.CurrentBuyIn;
             }
