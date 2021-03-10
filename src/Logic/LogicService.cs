@@ -13,7 +13,7 @@ namespace Nancy.Simple.Logic
         {
             var tournament = new Tournament();
 
-            if (tournament.Round == 1)
+            //if (tournament.Round == 1)
             {
                 if (tournament.OurPlayer.HasPocket())
                 {
