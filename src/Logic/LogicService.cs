@@ -41,7 +41,7 @@ namespace Nancy.Simple.Logic
 
             var considerAllIn = false;
             var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
-            if (tournament.IsPreFlop > 0)
+            if (tournament.IsPreFlop)
             {
                 betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 10);
             }
