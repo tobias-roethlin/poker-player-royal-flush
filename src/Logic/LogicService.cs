@@ -51,21 +51,34 @@ namespace Nancy.Simple.Logic
             var firstCardWithCommunityCards = new[] { tournament.OurPlayer.Card1 }.Union(tournament.CommunityCards);
             var secondCardWithCommunityCards = new[] { tournament.OurPlayer.Card2 }.Union(tournament.CommunityCards);
             var ourCards = tournament.OurPlayer.GetCards();
-            var ourCardsWIthCommunityCards = ourCards.Union(tournament.CommunityCards);
+            var ourCardsWithCommunityCards = ourCards.Union(tournament.CommunityCards);
+            var communityCards = tournament.CommunityCards;
 
-            if (IsStraightFlush(firstCardWithCommunityCards) || IsStraightFlush(secondCardWithCommunityCards)
-                || IsFullHouse(firstCardWithCommunityCards) || IsFullHouse(secondCardWithCommunityCards)
-                || IsFourOfAKind(firstCardWithCommunityCards) || IsFourOfAKind(secondCardWithCommunityCards))
+            if ((IsStraightFlush(ourCardsWithCommunityCards) && !IsStraightFlush(communityCards))
+                || (IsFullHouse(ourCardsWithCommunityCards) && !IsFullHouse(communityCards))
+                || (IsFourOfAKind(ourCardsWithCommunityCards) && !IsFourOfAKind(communityCards)))
+            {
+                betValue = Math.Max(betValue, tournament.Pot * 3);
+                considerAllIn = true;
+            }
+            else if (((IsStraightFlush(firstCardWithCommunityCards) || IsStraightFlush(secondCardWithCommunityCards)) && !IsStraightFlush(communityCards))
+                || ((IsFullHouse(firstCardWithCommunityCards) || IsFullHouse(secondCardWithCommunityCards)) && !IsFullHouse(communityCards))
+                || ((IsFourOfAKind(firstCardWithCommunityCards) || IsFourOfAKind(secondCardWithCommunityCards)) && !IsFourOfAKind(communityCards)))
             {
                 betValue = Math.Max(betValue, tournament.Pot * 2);
                 considerAllIn = true;
             }
-            else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards) || IsFlush(ourCardsWIthCommunityCards)) && !IsFlush(tournament.CommunityCards))
+            else if (IsFlush(ourCardsWithCommunityCards) && !IsFlush(communityCards))
+            {
+                betValue = tournament.Pot * 2;
+                considerAllIn = true;
+            }
+            else if ((IsFlush(firstCardWithCommunityCards) || IsFlush(secondCardWithCommunityCards) || IsFlush(ourCardsWithCommunityCards)) && !IsFlush(communityCards))
             {
                 betValue = tournament.Pot * 1.5;
                 considerAllIn = true;
             }
-            else if ((IsStraight(firstCardWithCommunityCards) || IsStraight(secondCardWithCommunityCards)) &&  !IsStraight(tournament.CommunityCards))
+            else if ((IsStraight(firstCardWithCommunityCards) || IsStraight(secondCardWithCommunityCards) || IsStraight(ourCardsWithCommunityCards)) && !IsStraight(communityCards))
             {
                 betValue = tournament.Pot * 1.5;
                 considerAllIn = true;
@@ -82,7 +95,7 @@ namespace Nancy.Simple.Logic
             {
                 betValue = tournament.Pot * 0.8;
             }
-            else if ((IsPair(firstCardWithCommunityCards) || IsPair(secondCardWithCommunityCards)) && !IsPair(tournament.CommunityCards))
+            else if ((IsPair(firstCardWithCommunityCards) || IsPair(secondCardWithCommunityCards)) && !IsPair(communityCards))
             {
                 betValue = tournament.Pot * 0.5;
             }
