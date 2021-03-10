@@ -31,32 +31,6 @@ namespace Nancy.Simple.Logic
             }
 
             return (int)(tournament.OurPlayer.Stack * probability);
-
-            ////tournament.OtherPlayers = new List<Player>();
-            ////tournament.OurPlayer = new Player
-            ////{
-
-            ////};
-
-            //if (tournament == null)
-            //{
-            //    return tournament.OurPlayer.Stack / 10;
-            //}
-
-            //if (tournament.Round == 1)
-            //{
-            //    if (tournament.OurPlayer.SameRank())
-            //    {
-            //        return tournament.OurPlayer.Stack;
-            //    }
-
-            //    if (tournament.OurPlayer.SameColor())
-            //    {
-            //        return tournament.OurPlayer.Stack / 4;
-            //    }
-            //}
-
-            //return tournament.OurPlayer.Stack / 10;
         }
 
         public static Dictionary<string, double> GetProbabilities()
