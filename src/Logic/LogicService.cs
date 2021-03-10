@@ -82,7 +82,7 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
-            return Math.Min(Math.Max((int)betValue, tournament.CurrentBuyIn), tournament.OurPlayer.Stack);
+            return (int)Math.Min(Math.Max((int)betValue, tournament.CurrentBuyIn), considerAllIn ? tournament.OurPlayer.Stack : tournament.OurPlayer.Stack * 0.7);
         }
 
         private static bool IsFourOfAKind(Tournament tournament)
