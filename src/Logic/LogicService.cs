@@ -29,7 +29,9 @@ namespace Nancy.Simple.Logic
                 return 0;
             }
 
-            var probabilities = WinProbabilityEvaluator.GetInitialProbabilities(1 + tournament.OtherPlayers.Count(p => p.Status == "active"));
+            var numberOfPlayers = 1 + tournament.OtherPlayers.Count(p => p.Status == "active");
+            var aggressionlevel = GetAggressionLevel(numberOfPlayers);
+            var probabilities = WinProbabilityEvaluator.GetInitialProbabilities(numberOfPlayers);
             double probability = 0;
             if (!probabilities.TryGetValue(firstCombination, out probability))
             {
@@ -42,7 +44,7 @@ namespace Nancy.Simple.Logic
                 betValue = Math.Max(betValue, tournament.Pot * 0.5);
             }
 
-            var maxBetValue = betValue * 2;
+            var maxBetValue = betValue * GetAggressionLevel(numberOfPlayers);
 
             if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
             {
@@ -65,6 +67,17 @@ namespace Nancy.Simple.Logic
             }
 
             return card2;
+        }
+
+        public static double GetAggressionLevel(int playerCount)
+        {
+            switch (playerCount)
+            {
+                case 2: return 3;
+                case 3: return 2.5;
+                case 4: return 2.2;
+                default: return 2;
+            }
         }
     }
 }
