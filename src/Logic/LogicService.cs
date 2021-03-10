@@ -293,20 +293,6 @@ namespace Nancy.Simple.Logic
             public List<Player> OtherPlayers { get; set; }
             public Player OurPlayer { get; set; }
             public int Round { get; set; }
-            public double GetProbabilityOfBeingBetFirstRound()
-            {
-                if (OurPlayer.SameRank())
-                {
-                    return this.SameRankFirstRound();
-                }
-
-                if (OurPlayer.SameColor())
-                {
-                    return this.SameColorFirstRound();
-                }
-
-                return this.FirstRound();
-            }
         }
 
         public class Player
