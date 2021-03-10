@@ -37,10 +37,27 @@ namespace Nancy.Simple.Logic
                 probabilities.TryGetValue(secondCombination, out probability);
             }
 
-            var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability);
+            var betValue = tournament.OurPlayer.Stack * (1.0 / 100 * probability / 2);
             if (probability > 0.5)
             {
                 betValue = Math.Max(betValue, tournament.Pot * 0.5);
+            }
+
+            if (IsFullHouse(tournament) || IsFourOfAKind(tournament))
+            {
+                betValue = Math.Max(betValue, tournament.OurPlayer.Stack);
+            }
+            else if (IsThreeOfAKind(tournament))
+            {
+                betValue = Math.Max(betValue, tournament.OurPlayer.Stack * 0.9);
+            }
+            else if (IsTwoPair(tournament) || IsStraight(tournament) || IsFlush(tournament))
+            {
+                betValue = Math.Max(betValue, tournament.OurPlayer.Stack * 0.8);
+            }
+            else if (IsPair(tournament))
+            {
+                betValue = Math.Max(betValue, tournament.OurPlayer.Stack * 0.3);
             }
 
             var maxBetValue = betValue * 2;
@@ -56,6 +73,72 @@ namespace Nancy.Simple.Logic
             }
 
             return Math.Min(Math.Max((int)betValue, tournament.CurrentBuyIn), tournament.OurPlayer.Stack);
+        }
+
+        private static bool IsFourOfAKind(Tournament tournament)
+        {
+            return tournament.GetCards().GroupBy(c => c.Rank).Any(g => g.Count() == 4);
+        }
+
+        private static bool IsFullHouse(Tournament tournament)
+        {
+            return tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 2).Count() == 1
+                && tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 3).Count() == 1;
+        }
+
+        private static bool IsThreeOfAKind(Tournament tournament)
+        {
+            return tournament.GetCards().GroupBy(c => c.Rank).Any(g => g.Count() == 3);
+        }
+
+        private static bool IsTwoPair(Tournament tournament)
+        {
+            return tournament.GetCards().GroupBy(c => c.Rank).Where(g => g.Count() == 2).Count() == 2;
+        }
+
+        private static bool IsPair(Tournament tournament)
+        {
+            return tournament.GetCards().GroupBy(c => c.Rank).Any(g => g.Count() == 2);
+        }
+
+        private static bool IsFlush(Tournament tournament)
+        {
+            return tournament.GetCards().GroupBy(c => c.Color).Any(g => g.Count() >= 5);
+        }
+
+        private static bool IsStraight(Tournament tournament)
+        {
+            var orderedRanks = GetRanks(tournament).OrderBy(e => e);
+            for (int i = 1; i < 14; i++)
+            {
+                if (orderedRanks.Contains(i)
+                    && orderedRanks.Contains(i + 1)
+                    && orderedRanks.Contains(i + 2)
+                    && orderedRanks.Contains(i + 3)
+                    && orderedRanks.Contains(i + 4))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static HashSet<int> GetRanks(Tournament tournament)
+        {
+            var set = new HashSet<int>();
+
+            foreach (var card in tournament.GetCards())
+            {
+                set.Add((int)card.Rank);
+            }
+
+            if (set.Contains(14))
+            {
+                set.Add(1);
+            }
+
+            return set;
         }
 
         private static Card GetHigherCard(Card card1, Card card2)
@@ -161,6 +244,16 @@ namespace Nancy.Simple.Logic
             public int Round { get; set; }
             public int CurrentBuyIn { get; set; }
             public int Pot { get; set; }
+
+            public IEnumerable<Card> GetCards()
+            {
+                yield return OurPlayer.Card1;
+                yield return OurPlayer.Card2;
+                foreach (var card in CommunityCards)
+                {
+                    yield return card;
+                }
+            }
         }
 
         public class Player
