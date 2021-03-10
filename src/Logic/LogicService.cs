@@ -70,7 +70,7 @@ namespace Nancy.Simple.Logic
                 betValue = Math.Max(betValue, tournament.Pot * 0.3);
             }
 
-            var maxBetValue = betValue * 2;
+            var maxBetValue = betValue * aggressionlevel;
 
             if (tournament.Round == 0 && betValue < tournament.CurrentBuyIn)
             {
