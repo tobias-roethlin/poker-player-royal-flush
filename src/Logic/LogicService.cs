@@ -93,6 +93,11 @@ namespace Nancy.Simple.Logic
                 betValue = tournament.Pot * 1.4;
                 considerAllIn = true;
             }
+            else if (IsThreeOfAKind(ourCardsWithCommunityCards) && !IsPair(communityCards))
+            {
+                betValue = tournament.Pot * 1.3;
+                considerAllIn = true;
+            }
             else if ((IsThreeOfAKind(firstCardWithCommunityCards) || IsThreeOfAKind(secondCardWithCommunityCards)) && !IsThreeOfAKind(communityCards))
             {
                 betValue = tournament.Pot * 1.1;
