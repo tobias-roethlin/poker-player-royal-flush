@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using System;
+using Newtonsoft.Json.Linq;
 
 namespace Nancy.Simple
 {
@@ -8,12 +9,17 @@ namespace Nancy.Simple
 
 		public static int BetRequest(JObject gameState)
 		{
+			
+			
 			//TODO: Use this method to return the value You want to bet
-			return 0;
+			return Int32.MaxValue;
 		}
 
 		public static void ShowDown(JObject gameState)
 		{
+			
+			
+			
 			//TODO: Use this method to showdown
 		}
 	}
